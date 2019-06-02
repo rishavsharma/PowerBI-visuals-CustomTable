@@ -1,0 +1,96 @@
+@import (less) "node_modules/powerbi-visuals-utils-formattingutils/lib/index.css";
+
+p {
+    font-size: 20px;
+    font-weight: bold;
+    em {
+        background: yellow;
+        padding: 5px;
+    }
+}
+
+
+.tablewrapper {
+    width:100%;
+    background-color: #fff;
+    //position: relative;
+    //overflow: hidden;
+    font-family: "Segoe UI", wf_segoe-ui_normal, helvetica, arial, sans-serif;
+    font-size: 12px;    
+}
+
+.div-table {
+    display: table;         
+    border: 1px;
+  }
+  .div-table-row-masterheader {
+    display: table-caption;
+    width: auto;
+    clear: both;
+  }  
+  .div-table-row-header {
+    display: table-row;
+    width: auto;
+    clear: both;
+  }
+.div-table-row {
+    display: table-row;
+    width: auto;
+    clear: both;
+    background-color: #fff;
+  }
+
+  .div-table-col {
+//    float: left; /* fix for  buggy browsers */
+    display: table-cell;         
+  }
+  .div-table-col-number {
+//    float: left; /* fix for  buggy browsers */
+    display: table-cell;         
+    text-align: right;
+  }
+  .table-cell-content {
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-right:4px;
+      padding-left:4px;
+  }
+
+
+
+.TextCodeBox {
+    width: 99%;
+    height: 45%;
+    word-break: break-word;
+    overflow-y: auto;
+    font-family: monospace;
+    white-space: pre-wrap;
+    resize: none;
+    max-width: none;
+    background-color:#000;
+    color: #fff;
+    white-space: pre;
+}
+
+.TextCodeBoxSample {
+    background-color:#eee;
+    color: #333;
+    white-space: pre;
+}
+
+.inputButton {
+    background-color: #555; 
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin:5px;
+    cursor: pointer;
+}
+
+.inputButton:active {
+  background-color: #000;
+}

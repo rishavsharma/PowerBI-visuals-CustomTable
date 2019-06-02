@@ -1,0 +1,32 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Fields",
+            "name": "values",
+            "kind": "GroupingOrMeasure"
+        }
+    ],
+    "advancedEditModeSupport": 2,
+    "objects": {
+        "dataPoint": {
+            "displayName": "Settings",
+            "properties": {
+                "tableConfiguration" : {
+                    "displayName": "Config",                   
+                    "type": { "text": true}
+                }
+            }
+        }
+    },
+    "dataViewMappings": [
+        {
+            "table": {
+                "rows": {
+                    "for": {
+                        "in": "values"
+                    }
+                }
+            }
+        }
+    ]
+}
