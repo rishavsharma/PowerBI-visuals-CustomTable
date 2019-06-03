@@ -19,12 +19,14 @@ import { valueFormatter } from "powerbi-visuals-utils-formattingutils/lib/src/va
 import * as FormatUtils from "./FormattingUtil"
 import { CalculationEngine } from './CalculationEngine';
 import * as Utils from "./utils"
+import { EditModeVisual } from "./visuals/EditModeVisual"
+import "bootstrap";
 
 //function visualTransform(options: VisualUpdateOptions, host: IVisualHost, thisRef: Visual): VisualViewModel {            
 function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
     let dataViews = options.dataViews;
     var a = options.dataViews[0].metadata.columns[1];
-    
+
     let tblView = dataViews[0].table;
 
     var tblData = [];
@@ -46,7 +48,7 @@ function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
         };
         tblData.push(row);
     }
-    console.log("Table data",options);
+    console.log("Table data", options);
     return tblData;
 }
 
@@ -61,7 +63,7 @@ export class Visual implements IVisual {
     private sampleJson: string;
     private displayAllRows: boolean = true;
     private internalVersionNo: string = "2.0.0";
-    private CalculationEngine : CalculationEngine;
+    private CalculationEngine: CalculationEngine;
     constructor(options: VisualConstructorOptions) {
         this.host = options.host;
         this.target = options.element;
@@ -72,9 +74,9 @@ export class Visual implements IVisual {
         var w = options.viewport.width;
         var h = options.viewport.height;
         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-        
+
         this.model = visualTransform(options, this);
-        
+
         this.tableDefinition = null;
         var errorMsg = "";
         if (this.settings.dataPoint.tableConfiguration.trim().length > 0) {
@@ -85,7 +87,7 @@ export class Visual implements IVisual {
                 errorMsg = "Error parsing table definition. Enter edit mode and correct the error.";
             }
         }
-        this.CalculationEngine=new CalculationEngine(this.model, this.tableDefinition);
+        this.CalculationEngine = new CalculationEngine(this.model, this.tableDefinition);
         if (options.editMode === 1) {
             this.ClearAllContent();
             this.RenderEditMode();
@@ -178,7 +180,7 @@ export class Visual implements IVisual {
         that.RenderAllContent(divRenderInEditMode, tableDefTmp);
     }
 
-    private saveConfig(jsonCinfig: string) {
+    public saveConfig(jsonCinfig: string) {
         this.settings.dataPoint.tableConfiguration = jsonCinfig;
         let general: VisualObjectInstance[] = [{
             objectName: "dataPoint",
@@ -194,7 +196,7 @@ export class Visual implements IVisual {
         this.host.persistProperties(propertToChange);
     }
 
-    private EditModeCreateTemplateFromFieldList() {
+    public EditModeCreateTemplateFromFieldList() {
         this.editModeJsonEditor.value = this.templateFromFields();
     }
 
@@ -296,7 +298,7 @@ export class Visual implements IVisual {
         return vEvaluated.trim();
     }
 
-    private RenderAllContent(targetElement: HTMLElement, tableDefinition: any) {
+    public RenderAllContent(targetElement: HTMLElement, tableDefinition: any) {
         if (tableDefinition === null) {
             this.RenderNoContentText();
             return;
