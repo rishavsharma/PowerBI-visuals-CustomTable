@@ -1,5 +1,5 @@
-@import (less) "node_modules/powerbi-visuals-utils-formattingutils/lib/index.css";
-@import "node_modules/bootstrap/scss/bootstrap";
+@import (less) "../node_modules/powerbi-visuals-utils-formattingutils/lib/index.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 p {
     font-size: 20px;
     font-weight: bold;
@@ -93,4 +93,41 @@ p {
 
 .inputButton:active {
   background-color: #000;
+}
+
+[data-schemapath="root"] > h3 {
+  display: none; 
+ }
+
+[data-schemapath="root.columns.0"] > h3 {
+ display: none; 
+}
+
+[data-schemapath="root.columns.1"] button.json-editor-btn-moveup {
+  display: none; 
+ }
+
+ [data-schemapath ^="root.columns."] > h3 > span {
+  display: none; 
+ }
+
+ [data-schemapath ^="root.rows."] > h3 > span {
+  display: none; 
+ }
+
+ div.newEditor  button.btn-secondary{
+   font-size: 12px;
+ }
+
+ .tabbable .nav-tabs {
+  overflow-x: auto;
+  overflow-y:hidden;
+  flex-wrap: nowrap;
+}
+
+div.newEditor * {
+  font-size:12px!important;
+  font-family: sans-serif;
+  font-weight: 100;
+  
 }

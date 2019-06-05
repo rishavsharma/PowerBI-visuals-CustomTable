@@ -1,0 +1,17 @@
+{
+    "version": "1.0.0",
+    "author": {"name":"Rishav Sharma","email":"rishav.sharma@gmail.com"},
+    "resources": [
+        {
+            "resourceId": "rId0",
+            "sourceType": 5,
+            "file": "resources/CustomTable7CD11AC4C4714A2BBBE2D1B7D9FD6D22.pbiviz.json"
+        }
+    ],
+    "visual": {"name":"PowerBI-visuals-CustomTable","displayName":"Custom Table","guid":"CustomTable7CD11AC4C4714A2BBBE2D1B7D9FD6D22","visualClassName":"Visual","version":"1.0.0","description":"Custom Table","supportUrl":"https://github.com/rishavsharma/PowerBI-visuals-CustomTable","gitHubUrl":"https://github.com/rishavsharma/PowerBI-visuals-CustomTable"},
+    "metadata": {
+        "pbivizjson": {
+            "resourceId": "rId0"
+        }
+    }  
+}

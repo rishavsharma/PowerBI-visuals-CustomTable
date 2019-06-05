@@ -10,6 +10,7 @@ export class CalculationEngine {
     }
 public  GetValueForColumnRowCalculationByIndex(row: any, colIndex: number, colDef: any): any {
     // Till denna funktion kommer vi en gång per beräknad rad.
+    
     var fExpression = row.formula;
     for (var i = 0; i < this.model.length; i++) {
         // Gå igenom varje rad i modellen för att hitta referenser

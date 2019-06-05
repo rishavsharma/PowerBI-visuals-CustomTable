@@ -95,3 +95,104 @@ export function getTableTotalWidth(tableDefinition: any): number {
     }
     return w;
 }
+
+export function getTitle(col: any, tableDefinition: any, model : any) {
+    var i1 = col.title.indexOf("eval(", 0);
+    var i2 = col.title.indexOf(")", i1);
+    if (i1 === -1 || i2 === -1) {
+        return col.title;
+    }
+    var expressionToEval = col.title.substring(i1 + 5, i2);
+    var colNameWithBrackets = getStringInside("[", "]", expressionToEval, true);
+    if (colNameWithBrackets === null) {
+        return col.title;
+    }
+
+
+    var colIndex = null;
+    for (var i = 0; i < model[0].values.length; i++) {
+        if (model[0].values[i].refName === colNameWithBrackets) {
+            colIndex = i;
+            break;
+        }
+    }
+    if (colIndex === null) {
+        return col.title;
+    }
+    var title = col.title;
+    title = replace2(title, colNameWithBrackets, model[0].values[colIndex].rawValue);
+    i1 = title.indexOf("eval(", 0);
+    i2 = title.lastIndexOf(")");
+    var v = title.substring(i1 + 5, i2);
+    var vEvaluated = title.substring(0, i1) + eval(v) + title.substring(i2 + 1);
+    return vEvaluated.trim();
+}
+
+export function templateFromFields(model : any): string {
+    // Columns
+    var colJson = "";
+    for (var c = 0; c < model[0].values.length; c++) {
+        var col = model[0].values[c];
+        var j1 = `
+{
+    "headerStyle": "border-bottom:1px;border-bottom-color:#eee;border-bottom-style:solid",
+    "rowStyle": "%ROWSTYLE%",
+    "width": 150,
+    "type": "%COLTYPE%",
+    "refName": "%REFNAME%", 
+    "title": "%TITLECOLNAME%",
+    "calculationFormula": "", 
+    "format": ""
+},`;
+        if (c === 0) {
+            j1 = j1.replace(/%TITLECOLNAME%/g, col.displayName);
+            j1 = j1.replace(/%COLTYPE%/g, 'RowHeader');
+            j1 = j1.replace(/%ROWSTYLE%/g, 'text-align:left');
+        } else {
+            j1 = j1.replace(/%TITLECOLNAME%/g, col.displayName);
+            j1 = j1.replace(/%COLTYPE%/g, 'Data');
+            j1 = j1.replace(/%ROWSTYLE%/g, '');
+        }
+        j1 = j1.replace(/%REFNAME%/g, col.refName);
+        colJson += j1;
+    }
+    colJson = colJson.substr(0, colJson.length - 1);
+    // Rows (de tre första)
+    var rowJson = "";
+    for (var r = 0; r < model.length && r < 1000; r++) {
+        var row = model[r];
+        var j1 = `
+{
+    "title": "%ROWTITLE%",
+    "formula": "%FORMULA%",
+    "rowStyle": "",
+    "visible": true,
+    "cellRowHeaderStyle": "",
+    "cellRowDataStyle": ""
+},`;
+        j1 = j1.replace(/%ROWTITLE%/g, row.title);
+        j1 = j1.replace(/%FORMULA%/g, row.name);
+        rowJson += j1;
+    }
+    rowJson = rowJson.substr(0, rowJson.length - 1);
+    var fullJson = `
+{
+"columns": [
+%COLS%
+],
+"rows": [
+%ROWS%
+],
+"headerRow": {
+"rowStyle": ""
+},
+"displayAllRows": true
+}
+    `;
+    fullJson = fullJson.replace(/%COLS%/g, colJson);
+    fullJson = fullJson.replace(/%ROWS%/g, rowJson);
+    return fullJson;
+}
+
+
+

@@ -11,9 +11,22 @@
         "dataPoint": {
             "displayName": "Settings",
             "properties": {
-                "tableConfiguration" : {
-                    "displayName": "Config",                   
-                    "type": { "text": true}
+                "tableConfiguration": {
+                    "displayName": "Config",
+                    "type": {
+                        "text": true
+                    }
+                }
+            }
+        },
+        "customObject": {
+            "displayName": "Object",
+            "properties": {
+                "myFirstProperty": {
+                    "displayName": "firstPropertyName",
+                    "type": {
+                        "bool": true
+                    }
                 }
             }
         }
