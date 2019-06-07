@@ -21,7 +21,6 @@ import VisualObjectInstancesToPersist = powerbi.VisualObjectInstancesToPersist;
 import { CalculationEngine } from './CalculationEngine';
 //import * as Utils from "./utils"
 import { EditModeVisual } from "./visuals/EditModeVisual"
-import "bootstrap";
 
 //function visualTransform(options: VisualUpdateOptions, host: IVisualHost, thisRef: Visual): VisualViewModel {            
 function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
@@ -42,14 +41,20 @@ function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
             var isColumnNumeric = dataViews[0].table.columns[t].type.numeric;
             colData.push({ rawValue: rawValue, formatString: formatString, displayName: columnName, refName: "[" + columnName + "]", isNumeric: isColumnNumeric });
         }
+        var rowLabel = dataViews[0].table.rows[i][0];
+        if (!rowLabel) {
+            rowLabel = "_NULL"
+        }
         var row = {
-            title: dataViews[0].table.rows[i][0],
-            name: "[" + dataViews[0].table.rows[i][0] + "]",
+            title: rowLabel,
+            name: "[" + rowLabel + "]",
             values: colData,
         };
         tblData.push(row);
     }
-    //console.log("Table data", options);
+    console.log("Table data");
+    console.log(tblData);
+    console.log(options)
     return tblData;
 }
 
@@ -95,7 +100,7 @@ export class Visual implements IVisual {
             this.editModeVisual.ClearAllContent(this.target);
             this.editModeVisual.RenderEditMode(this.target, this.settings);
         } else {
-            if (errorMsg.length === 0) {                
+            if (errorMsg.length === 0) {
                 this.editModeVisual.ClearAllContent(this.target);
                 this.editModeVisual.RenderAllContent(this.target, this.tableDefinition);
             } else {
@@ -137,22 +142,22 @@ export class Visual implements IVisual {
     private static parseSettings(dataView: DataView): VisualSettings {
         return VisualSettings.parse(dataView) as VisualSettings;
     }
-    
+
     public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
         let objectName: string = options.objectName;
         let objectEnumeration: VisualObjectInstance[] = [];
-    
-        switch( objectName ) {
+
+        switch (objectName) {
             case 'Object':
                 objectEnumeration.push({
                     objectName: objectName,
-                    displayName : "Object",
-                    properties: { "firstPropertyName" : true },
+                    displayName: "Object",
+                    properties: { "firstPropertyName": true },
                     selector: null
                 });
                 break;
         };
-    
+
         return objectEnumeration;
     }
 

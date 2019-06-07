@@ -5,10 +5,12 @@ import * as FormatUtils from "../FormattingUtil"
 import { CalculationEngine } from "../CalculationEngine";
 import * as JSONEditor from "@json-editor/json-editor"
 import { EditorSchema } from "./EditorSchema"
+import * as $ from 'jquery'
 export class EditModeVisual {
     private internalVersionNo: string = "2.0.0";
     private visual: Visual;
     private editModeJsonEditor: HTMLTextAreaElement = null;
+    private jsoneditor: JSONEditor = null;
     constructor(visual: Visual) {
         this.visual = visual;
         this.editModeJsonEditor = document.createElement("textarea");
@@ -32,54 +34,61 @@ export class EditModeVisual {
         divContainer.style.height = "94%"; // With 100% we get scrollbars in edit mode.
         target.appendChild(divContainer);
         var divRenderInEditMode = document.createElement("div");
-        
+
         var newEditor: HTMLDivElement = document.createElement("div");
         newEditor.className = "newEditor"
-        //target.appendChild(newEditor);
+        //target.appendChild(newEditor);        
         var that = this.visual;
         var thisRef = this;
         newEditor.appendChild(btnSave);
         newEditor.appendChild(btnLoadFromFieldList);
-        
+
         divContainer.appendChild(newEditor);
-        
+
         var model = this.visual.getViewModel();
-        if(settings.dataPoint.tableConfiguration == ""){
-            settings.dataPoint.tableConfiguration =Utils.templateFromFields(model);
+        if (settings.dataPoint.tableConfiguration == "") {
+            settings.dataPoint.tableConfiguration = Utils.templateFromFields(model);
         }
         var tableConfig = JSON.parse(settings.dataPoint.tableConfiguration);
-        var jsoneditor = new JSONEditor(newEditor, {
-            theme: 'bootstrap4',
-            disable_properties: true,
-            no_additional_properties: true,
-            schema: EditorSchema.schema,
-            prompt_before_delete: false,
-            startval: tableConfig,
-           // iconlib: "bootstrap4"
-        });
-        jsoneditor.on('change', function () {
-            var tableConfig = jsoneditor.getValue();
-            settings.dataPoint.tableConfiguration = JSON.stringify(tableConfig)            
-            thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
-            
-            //var validation_errors = jsoneditor.validate();
-            // Show validation errors if there are any           
-        });
+        if (true) {
 
-        btnLoadFromFieldList.onclick = function (e) {
-            thisRef.EditModeCreateTemplateFromFieldList();
-            jsoneditor.setValue(JSON.parse(Utils.templateFromFields(model)));
+            try {
+                this.jsoneditor = new JSONEditor(newEditor, {
+                    theme: 'bootstrap4',
+                    disable_properties: true,
+                    no_additional_properties: true,
+                    schema: EditorSchema.schema,
+                    prompt_before_delete: false,
+                    startval: tableConfig,
+                    // iconlib: "bootstrap4"
+                });
+
+                this.jsoneditor.on('change', function () {
+                    var tableConfig = thisRef.jsoneditor.getValue();
+                    settings.dataPoint.tableConfiguration = JSON.stringify(tableConfig)
+                    thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
+
+                    //var validation_errors = jsoneditor.validate();
+                    // Show validation errors if there are any           
+                });
+
+                btnLoadFromFieldList.onclick = function (e) {
+                    thisRef.EditModeCreateTemplateFromFieldList();
+                    var config = JSON.parse(Utils.templateFromFields(model));
+                    thisRef.jsoneditor.setValue(config);
+
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+            btnSave.onclick = function (e) {
+                that.saveConfig();
+            }
+
+            divContainer.appendChild(divRenderInEditMode);
+
         }
-        btnSave.onclick = function(e){
-            that.saveConfig();
-        }
-        //
-
-
-        //divContainer.appendChild(txtJson);
-        divContainer.appendChild(divRenderInEditMode);
-
-        
         thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
     }
 
@@ -108,8 +117,9 @@ export class EditModeVisual {
 
         // Border round hwole table 
         var customTableStyle = "";
-        if (typeof tableDefinition.masterHeader !== 'undefined') {
-            customTableStyle = ";" + tableDefinition.masterHeader.borderStyle + ";";
+        if (typeof tableDefinition.tableProp.Table !== 'undefined') {
+            var tableStyle = FormatUtils.getStyle(tableDefinition.tableProp.Table, tableDefinition);
+            customTableStyle = ";" + tableStyle + ";";
         }
         var w = Utils.getTableTotalWidth(tableDefinition);
         //var tableHtml = "<div class='tablewrapper'><div class='div-table' style='width:"+w+"px"+customTableStyle+"''>"; // TODO: Det verkar som att bredden inte behövs - det ställer bara till det när det gäller additionalwidth... Nackdelen är att vi inte får en scrollbar om vi förminskar fönstret...
@@ -117,7 +127,7 @@ export class EditModeVisual {
 
 
         // Table header row
-        var rowStyle = FormatUtils.getStyle(tableDefinition.headerRow.rowStyle, tableDefinition);
+        var rowStyle = FormatUtils.getStyle(tableDefinition.tableProp.Header, tableDefinition);
 
         // Master header
         if (typeof tableDefinition.masterHeader !== 'undefined') {
@@ -164,7 +174,7 @@ export class EditModeVisual {
             var rowCols = [];
             for (var c = 0; c < tableDefinition.columns.length; c++) {
                 var col = tableDefinition.columns[c];
-                var colRowStyle = FormatUtils.getStyle(col.rowStyle, tableDefinition);
+                var colRowStyle = FormatUtils.getStyle(col.colStyle, tableDefinition);
                 var renderValue = "";
                 var rowStyle = "width:" + col.width + "px;" + colRowStyle;
                 var cellRowDataStyle = FormatUtils.getStyle(row.cellRowDataStyle, tableDefinition);
