@@ -19,13 +19,18 @@
                 }
             }
         },
-        "customObject": {
-            "displayName": "Object",
+        "test": {
+            "displayName": "Mera Color",
             "properties": {
-                "myFirstProperty": {
-                    "displayName": "firstPropertyName",
+                "circleColor": {
+                    "displayName": "Color",
+                    "description": "The fill color of the circle.",
                     "type": {
-                        "bool": true
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
                     }
                 }
             }

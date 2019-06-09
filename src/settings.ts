@@ -6,14 +6,14 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 
 export class VisualSettings extends DataViewObjectsParser {
   public dataPoint: dataPointSettings = new dataPointSettings();
-  public customObject: customObjectSettings = new customObjectSettings();
+  public test: TestSettings = new TestSettings();
 }
 
 export class dataPointSettings {
   public tableConfiguration: string = "";
 }
 
-export class customObjectSettings {
-  public firstPropertyName: boolean = false;
+export class TestSettings {
+  public circleColor: string = "white";
 }
 

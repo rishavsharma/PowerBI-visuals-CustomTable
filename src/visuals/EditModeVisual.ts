@@ -1,11 +1,11 @@
 import { Visual } from '../visual';
 import { VisualSettings } from "../settings";
-import * as Utils from "../utils"
-import * as FormatUtils from "../FormattingUtil"
-import { CalculationEngine } from "../CalculationEngine";
+import * as Utils from "./utils"
+import * as FormatUtils from "./FormattingUtil"
+import { CalculationEngine } from "./CalculationEngine";
 import * as JSONEditor from "@json-editor/json-editor"
 import { EditorSchema } from "./EditorSchema"
-import * as $ from 'jquery'
+//import * as $ from 'jquery'
 export class EditModeVisual {
     private internalVersionNo: string = "2.0.0";
     private visual: Visual;

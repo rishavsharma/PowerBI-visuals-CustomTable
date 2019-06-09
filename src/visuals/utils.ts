@@ -57,6 +57,8 @@ export function EvalFormula(expr) {
         e = eval(expr);
     } catch (exc) {
         e = null;
+        console.log(expr);
+        console.log(exc);
     }
     return e;
 }
@@ -130,7 +132,6 @@ export function getTitle(col: any, tableDefinition: any, model: any) {
 }
 
 export function templateFromFields(model: any): string {
-    console.log(model)
     // Columns
     var colJson = "";
     for (var c = 0; c < model[0].values.length; c++) {
@@ -187,7 +188,6 @@ export function templateFromFields(model: any): string {
     `;
     fullJson = fullJson.replace(/%COLS%/g, colJson);
     fullJson = fullJson.replace(/%ROWS%/g, rowJson);
-    console.log("Templae:" + fullJson)
     return fullJson;
 }
 

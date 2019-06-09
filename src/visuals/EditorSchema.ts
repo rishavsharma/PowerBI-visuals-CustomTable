@@ -11,7 +11,8 @@ export class EditorSchema {
           "color",
           "font-weight"],
         "options": {
-          "disable_collapse": true
+          "disable_collapse": true,
+          "disable_edit_json":true
         },
         "properties": {
           "background-color": {
@@ -39,8 +40,8 @@ export class EditorSchema {
             "$id": "#/definitions/CSSStyle/properties/font-weight",
             "type": "string",
             "title": "Font Weight",
-            "enum": ["inherit", "bold", "normal"],
-            "default": "inherit"
+            "enum": ["normal", "bold"],
+            "default": "normal"
           }
         }
       },
@@ -51,7 +52,8 @@ export class EditorSchema {
         "required": [
           "border-bottom"],
         "options": {
-          "disable_collapse": true
+          "disable_collapse": true,
+          "disable_edit_json":true
         },
         "properties": {
           "border-bottom": {
@@ -70,7 +72,8 @@ export class EditorSchema {
     "format": "categories",
     "basicCategoryTitle": "Main",
     "options": {
-      "disable_collapse": true
+      "disable_collapse": true,
+      "disable_edit_json":true
     },
     "required": [
       "tableProp",
@@ -94,7 +97,8 @@ export class EditorSchema {
           "title": "Column",
           "format": "categories",
           "options": {
-            "disable_collapse": true
+            "disable_collapse": true,
+            "disable_edit_json":true
           },
           "headerTemplate": "{{ i1 }} - {{ self.title }}",
           "required": [
@@ -114,19 +118,12 @@ export class EditorSchema {
               "$id": "#/properties/columns/items/properties/width",
               "type": "integer",
               "title": "Width",
-              "default": 0,
-              "examples": [
-
-              ]
+              "default": 0
             },
             "type": {
               "$id": "#/properties/columns/items/properties/type",
               "type": "string",
               "title": "Type",
-              "default": "",
-              "examples": [
-                "RowHeader"
-              ],
               "pattern": "^(.*)$",
               "enum": [
                 "RowHeader",
@@ -138,10 +135,6 @@ export class EditorSchema {
               "$id": "#/properties/columns/items/properties/refName",
               "type": "string",
               "title": "Refname",
-              "default": "",
-              "examples": [
-                "[Product]"
-              ],
               "pattern": "^(.*)$",
               "propertyOrder": 2
             },
@@ -149,10 +142,6 @@ export class EditorSchema {
               "$id": "#/properties/columns/items/properties/title",
               "type": "string",
               "title": "Title",
-              "default": "",
-              "examples": [
-                ""
-              ],
               "pattern": "^(.*)$",
               "propertyOrder": 1
             },
@@ -160,11 +149,6 @@ export class EditorSchema {
               "$id": "#/properties/columns/items/properties/calculationFormula",
               "type": "string",
               "title": "Calculationformula",
-              "default": "",
-              "examples": [
-                ""
-              ],
-              "pattern": "^(.*)$",
               "propertyOrder": 3
             },
             "format": {
@@ -198,7 +182,8 @@ export class EditorSchema {
           "title": "Row",
           "format": "categories",
           "options": {
-            "disable_collapse": true
+            "disable_collapse": true,
+            "disable_edit_json":true
           },
           "headerTemplate": "{{ i1 }} - {{ self.title }}",
           "required": [
@@ -257,7 +242,8 @@ export class EditorSchema {
         "format": "categories",
         "required": ["Header", "Table", "Borders"],
         "options": {
-          "disable_collapse": true
+          "disable_collapse": true,
+          "disable_edit_json":true
         },
         "properties": {
           "Table": { "$ref": "#/definitions/CSSStyle" },

@@ -10,7 +10,7 @@ import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInst
 import VisualObjectInstance = powerbi.VisualObjectInstance;
 import DataView = powerbi.DataView;
 import IVisualHost = powerbi.extensibility.visual.IVisualHost;
-import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnumerationObject;
+//import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnumerationObject;
 import VisualObjectInstanceEnumeration = powerbi.VisualObjectInstanceEnumeration;
 import { VisualSettings } from "./settings";
 import VisualObjectInstancesToPersist = powerbi.VisualObjectInstancesToPersist;
@@ -18,12 +18,12 @@ import VisualObjectInstancesToPersist = powerbi.VisualObjectInstancesToPersist;
 // import { dataViewTransform } from "powerbi-visuals-utils-dataviewutils";
 // import { valueFormatter } from "powerbi-visuals-utils-formattingutils/lib/src/valueFormatter";
 // import * as FormatUtils from "./FormattingUtil"
-import { CalculationEngine } from './CalculationEngine';
+import { CalculationEngine } from './visuals/CalculationEngine';
 //import * as Utils from "./utils"
 import { EditModeVisual } from "./visuals/EditModeVisual"
 
 //function visualTransform(options: VisualUpdateOptions, host: IVisualHost, thisRef: Visual): VisualViewModel {            
-function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
+function visualTransform(options: VisualUpdateOptions): any {
     let dataViews = options.dataViews;
     var a = options.dataViews[0].metadata.columns[1];
 
@@ -52,9 +52,43 @@ function visualTransform(options: VisualUpdateOptions, thisRef: Visual): any {
         };
         tblData.push(row);
     }
-    console.log("Table data");
+    //TODO: remove
+    
+    return tblData;
+}
+
+function visualTransform2(options: VisualUpdateOptions, tableDefinition : any): any {
+    let dataViews = options.dataViews;
+    var a = options.dataViews[0].metadata.columns[1];
+
+    let tblView = dataViews[0].table;
+
+    var tblData = {};
+
+    for (var i = 0; i < dataViews[0].table.rows.length; i++) {
+        var r = dataViews[0].table.rows[i];
+        var colData = {};
+        for (var t = 0; t < r.length; t++) {
+            var rawValue = r[t];
+            var formatString = dataViews[0].table.columns[t].format;
+            var columnName = dataViews[0].table.columns[t].displayName;
+            var isColumnNumeric = dataViews[0].table.columns[t].type.numeric;
+            colData[columnName]={ rawValue: rawValue, formatString: formatString, displayName: columnName, refName: "[" + columnName + "]", isNumeric: isColumnNumeric };
+        }
+        var rowLabel = dataViews[0].table.rows[i][0];
+        if (!rowLabel) {
+            rowLabel = "_NULL"
+        }
+        var row = {
+            title: rowLabel,
+            name: "[" + rowLabel + "]",
+            values: colData,
+        };
+        tblData[rowLabel.toString()]=row;
+    }
+    //TODO: remove
+    console.log(tableDefinition);
     console.log(tblData);
-    console.log(options)
     return tblData;
 }
 
@@ -71,6 +105,7 @@ export class Visual implements IVisual {
     private internalVersionNo: string = "2.0.0";
     private CalculationEngine: CalculationEngine;
     private editModeVisual: EditModeVisual;
+    private visualSettings: VisualSettings;
     constructor(options: VisualConstructorOptions) {
         this.host = options.host;
         this.target = options.element;
@@ -82,9 +117,9 @@ export class Visual implements IVisual {
         var w = options.viewport.width;
         var h = options.viewport.height;
         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-
-        this.model = visualTransform(options, this);
-
+        
+        this.model = visualTransform(options);
+        console.log(this.model);
         this.tableDefinition = null;
         var errorMsg = "";
         if (this.settings.dataPoint.tableConfiguration.trim().length > 0) {
@@ -95,7 +130,7 @@ export class Visual implements IVisual {
                 errorMsg = "Error parsing table definition. Enter edit mode and correct the error.";
             }
         }
-        //this.CalculationEngine = new CalculationEngine(this.model, this.tableDefinition);
+        visualTransform2(options, this.tableDefinition);
         if (options.editMode === 1) {
             this.editModeVisual.ClearAllContent(this.target);
             this.editModeVisual.RenderEditMode(this.target, this.settings);
@@ -138,28 +173,18 @@ export class Visual implements IVisual {
         this.host.persistProperties(propertToChange);
     }
 
+    
+
 
     private static parseSettings(dataView: DataView): VisualSettings {
         return VisualSettings.parse(dataView) as VisualSettings;
     }
 
     public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
-        let objectName: string = options.objectName;
-        let objectEnumeration: VisualObjectInstance[] = [];
-
-        switch (objectName) {
-            case 'Object':
-                objectEnumeration.push({
-                    objectName: objectName,
-                    displayName: "Object",
-                    properties: { "firstPropertyName": true },
-                    selector: null
-                });
-                break;
-        };
-
-        return objectEnumeration;
-    }
+        const settings: VisualSettings = this.visualSettings ||
+       VisualSettings.getDefault() as VisualSettings;
+        return VisualSettings.enumerateObjectInstances(settings, options);
+       }
 
 }
 
