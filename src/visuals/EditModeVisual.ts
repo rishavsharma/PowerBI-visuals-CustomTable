@@ -67,7 +67,7 @@ export class EditModeVisual {
                     var tableConfig = thisRef.jsoneditor.getValue();
                     settings.dataPoint.tableConfiguration = JSON.stringify(tableConfig)
                     thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
-
+                    console.log(tableConfig);
                     //var validation_errors = jsoneditor.validate();
                     // Show validation errors if there are any           
                 });
@@ -123,7 +123,7 @@ export class EditModeVisual {
         }
         var w = Utils.getTableTotalWidth(tableDefinition);
         //var tableHtml = "<div class='tablewrapper'><div class='div-table' style='width:"+w+"px"+customTableStyle+"''>"; // TODO: Det verkar som att bredden inte behövs - det ställer bara till det när det gäller additionalwidth... Nackdelen är att vi inte får en scrollbar om vi förminskar fönstret...
-        var tableHtml = "<div class='tablewrapper'><div class='div-table' style='" + customTableStyle + "''>";
+        var tableHtml = "<div class='tablewrapper'><table class='table table-condensed table-borderless' style='" + customTableStyle + "''>";
 
 
         // Table header row
@@ -134,13 +134,13 @@ export class EditModeVisual {
             tableHtml += "<div class='div-table-row-masterheader'  style='" + tableDefinition.masterHeader.headerStyle + "'><div>" + tableDefinition.masterHeader.title + "</div></div>";
         }
 
-        tableHtml += "<div class='div-table-row-header' style='" + rowStyle + "'>";
+        tableHtml += "<tr class='div-table-row-header' style='" + rowStyle + "'>";
         for (var c = 0; c < tableDefinition.columns.length; c++) {
             var headerStyle = FormatUtils.getStyle(tableDefinition.columns[c].headerStyle, tableDefinition);
             var headerTitle = Utils.getTitle(tableDefinition.columns[c], tableDefinition, model);
-            tableHtml += "<div class='div-table-col-number' style='width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></div>";
+            tableHtml += "<th class='div-table-col-number' style='width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
         }
-        tableHtml += "</div>";
+        tableHtml += "</tr>";
         var DisplayAllRows = false; // Default value = display all rows
         if (typeof (tableDefinition.displayAllRows) !== "undefined") {
             DisplayAllRows = tableDefinition.displayAllRows;
@@ -169,7 +169,7 @@ export class EditModeVisual {
             var row = tableDefinition.rows[r];
             var rowHtml = "";
             var rowStyle = FormatUtils.getStyle(row.rowStyle, tableDefinition);
-            rowHtml += "<div class='div-table-row' style='" + rowStyle + "'>";
+            rowHtml += "<tr class='div-table-row' style='" + rowStyle + "'>";
             var allColumnsAreBlank: boolean = true;
             var rowCols = [];
             for (var c = 0; c < tableDefinition.columns.length; c++) {
@@ -233,10 +233,10 @@ export class EditModeVisual {
                 if (row.formula.length === 0) {
                     renderValue = "";
                 }
-                var colHtml = "<div class='div-table-col-number' style='" + rowStyle + "'><div class='table-cell-content' style='" + cellRowDataStyle + "'>" + renderValue + "</div></div>";
+                var colHtml = "<td class='div-table-col-number' style='" + rowStyle + "'><div class='table-cell-content' style='" + cellRowDataStyle + "'><pre>" + renderValue + "</pre></div></td>";
                 rowHtml += colHtml;
             }
-            rowHtml += "</div>";
+            rowHtml += "</tr>";
             if (!allColumnsAreBlank || row.formula.length === 0 || DisplayAllRows) {
                 //tableHtml += rowHtml;
             } else {
@@ -268,7 +268,7 @@ export class EditModeVisual {
                 tableHtml += rowHtml;
             }
         }
-        tableHtml += "</div></div>";
+        tableHtml += "</table></div>";
 
         targetElement.innerHTML = tableHtml;
     }

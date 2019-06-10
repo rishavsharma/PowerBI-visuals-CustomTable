@@ -19,65 +19,6 @@ p {
     font-size: 12px;    
 }
 
-.div-table {
-    display: table;         
-    //border: 1px;
-  }
-  .div-table-row-masterheader {
-    display: table-caption;
-    width: auto;
-    clear: both;
-    
-  }  
-  .div-table-row-header {
-    display: table-row;
-    width: auto;
-    clear: both;
-  }
-.div-table-row {
-    display: table-row;
-    width: auto;
-    clear: both;
-    //background-color: #fff;
-  }
-
-  .div-table-col {
-//    float: left; /* fix for  buggy browsers */
-    display: table-cell;         
-  }
-  .div-table-col-number {
-//    float: left; /* fix for  buggy browsers */
-    display: table-cell;         
-    text-align: right;
-  }
-  .table-cell-content {
-      padding-top:2px;
-      padding-bottom:2px;
-      padding-right:4px;
-      padding-left:4px;
-  }
-
-
-
-.TextCodeBox {
-    width: 99%;
-    height: 45%;
-    word-break: break-word;
-    overflow-y: auto;
-    font-family: monospace;
-    white-space: pre-wrap;
-    resize: none;
-    max-width: none;
-    background-color:#000;
-    color: #fff;
-    white-space: pre;
-}
-
-.TextCodeBoxSample {
-    background-color:#eee;
-    color: #333;
-    white-space: pre;
-}
 
 .inputButton {
     background-color: #555; 
@@ -131,4 +72,15 @@ div.newEditor * {
   font-family: sans-serif;
   font-weight: 100;
   
+}
+
+.div-table-row-header > th {
+  font-weight: inherit;
+}
+
+div.table-cell-content > pre {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  margin: 0px;
 }

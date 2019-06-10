@@ -53,42 +53,7 @@ function visualTransform(options: VisualUpdateOptions): any {
         tblData.push(row);
     }
     //TODO: remove
-    
-    return tblData;
-}
 
-function visualTransform2(options: VisualUpdateOptions, tableDefinition : any): any {
-    let dataViews = options.dataViews;
-    var a = options.dataViews[0].metadata.columns[1];
-
-    let tblView = dataViews[0].table;
-
-    var tblData = {};
-
-    for (var i = 0; i < dataViews[0].table.rows.length; i++) {
-        var r = dataViews[0].table.rows[i];
-        var colData = {};
-        for (var t = 0; t < r.length; t++) {
-            var rawValue = r[t];
-            var formatString = dataViews[0].table.columns[t].format;
-            var columnName = dataViews[0].table.columns[t].displayName;
-            var isColumnNumeric = dataViews[0].table.columns[t].type.numeric;
-            colData[columnName]={ rawValue: rawValue, formatString: formatString, displayName: columnName, refName: "[" + columnName + "]", isNumeric: isColumnNumeric };
-        }
-        var rowLabel = dataViews[0].table.rows[i][0];
-        if (!rowLabel) {
-            rowLabel = "_NULL"
-        }
-        var row = {
-            title: rowLabel,
-            name: "[" + rowLabel + "]",
-            values: colData,
-        };
-        tblData[rowLabel.toString()]=row;
-    }
-    //TODO: remove
-    console.log(tableDefinition);
-    console.log(tblData);
     return tblData;
 }
 
@@ -117,9 +82,8 @@ export class Visual implements IVisual {
         var w = options.viewport.width;
         var h = options.viewport.height;
         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-        
+
         this.model = visualTransform(options);
-        console.log(this.model);
         this.tableDefinition = null;
         var errorMsg = "";
         if (this.settings.dataPoint.tableConfiguration.trim().length > 0) {
@@ -130,7 +94,7 @@ export class Visual implements IVisual {
                 errorMsg = "Error parsing table definition. Enter edit mode and correct the error.";
             }
         }
-        visualTransform2(options, this.tableDefinition);
+
         if (options.editMode === 1) {
             this.editModeVisual.ClearAllContent(this.target);
             this.editModeVisual.RenderEditMode(this.target, this.settings);
@@ -173,18 +137,11 @@ export class Visual implements IVisual {
         this.host.persistProperties(propertToChange);
     }
 
-    
+
 
 
     private static parseSettings(dataView: DataView): VisualSettings {
         return VisualSettings.parse(dataView) as VisualSettings;
     }
-
-    public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
-        const settings: VisualSettings = this.visualSettings ||
-       VisualSettings.getDefault() as VisualSettings;
-        return VisualSettings.enumerateObjectInstances(settings, options);
-       }
-
 }
 

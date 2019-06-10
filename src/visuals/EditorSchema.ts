@@ -12,7 +12,7 @@ export class EditorSchema {
           "font-weight"],
         "options": {
           "disable_collapse": true,
-          "disable_edit_json":true
+          "disable_edit_json": true
         },
         "properties": {
           "background-color": {
@@ -27,7 +27,11 @@ export class EditorSchema {
             "type": "string",
             "title": "Font Size",
             "default": "",
-            "pattern": "^([0-9]{1,2}px)?$"
+            "examples": [
+              "12px",
+              "inherit",
+              "1em"
+            ]
           },
           "color": {
             "$id": "#/definitions/CSSStyle/properties/color",
@@ -40,8 +44,8 @@ export class EditorSchema {
             "$id": "#/definitions/CSSStyle/properties/font-weight",
             "type": "string",
             "title": "Font Weight",
-            "enum": ["normal", "bold"],
-            "default": "normal"
+            "enum": ["", "normal", "bold"],
+            "default": ""
           }
         }
       },
@@ -53,7 +57,7 @@ export class EditorSchema {
           "border-bottom"],
         "options": {
           "disable_collapse": true,
-          "disable_edit_json":true
+          "disable_edit_json": true
         },
         "properties": {
           "border-bottom": {
@@ -73,7 +77,7 @@ export class EditorSchema {
     "basicCategoryTitle": "Main",
     "options": {
       "disable_collapse": true,
-      "disable_edit_json":true
+      "disable_edit_json": true
     },
     "required": [
       "tableProp",
@@ -98,7 +102,7 @@ export class EditorSchema {
           "format": "categories",
           "options": {
             "disable_collapse": true,
-            "disable_edit_json":true
+            "disable_edit_json": true
           },
           "headerTemplate": "{{ i1 }} - {{ self.title }}",
           "required": [
@@ -118,7 +122,7 @@ export class EditorSchema {
               "$id": "#/properties/columns/items/properties/width",
               "type": "integer",
               "title": "Width",
-              "default": 0
+              "default": ""
             },
             "type": {
               "$id": "#/properties/columns/items/properties/type",
@@ -183,7 +187,7 @@ export class EditorSchema {
           "format": "categories",
           "options": {
             "disable_collapse": true,
-            "disable_edit_json":true
+            "disable_edit_json": true
           },
           "headerTemplate": "{{ i1 }} - {{ self.title }}",
           "required": [
@@ -243,7 +247,7 @@ export class EditorSchema {
         "required": ["Header", "Table", "Borders"],
         "options": {
           "disable_collapse": true,
-          "disable_edit_json":true
+          "disable_edit_json": true
         },
         "properties": {
           "Table": { "$ref": "#/definitions/CSSStyle" },

@@ -138,7 +138,7 @@ export function templateFromFields(model: any): string {
         var col = model[0].values[c];
         var j1 = `
 {
-    "width": 150,
+    "width": "0",
     "type": "%COLTYPE%",
     "refName": "%REFNAME%", 
     "title": "%TITLECOLNAME%",
