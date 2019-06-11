@@ -28,7 +28,7 @@ export function parseStyle(styleObject: any): string {
             var styleVal = "inherit"
             if (Utils.containsValue(styleObject[key])) {
                 styleVal = styleObject[key];
-                returnCSS = returnCSS + ";" + key + ":" + styleVal
+                returnCSS = returnCSS + ";" + key + ":" + styleVal + ";"
             }
             //returnCSS = returnCSS + ";" + key + ":" + styleVal
         }

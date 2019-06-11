@@ -9,7 +9,8 @@ export class EditorSchema {
           "background-color",
           "font-size",
           "color",
-          "font-weight"],
+          "font-weight",
+          "text-align"],
         "options": {
           "disable_collapse": true,
           "disable_edit_json": true
@@ -45,6 +46,13 @@ export class EditorSchema {
             "type": "string",
             "title": "Font Weight",
             "enum": ["", "normal", "bold"],
+            "default": ""
+          },
+          "text-align": {
+            "$id": "#/definitions/CSSStyle/properties/font-weight",
+            "type": "string",
+            "title": "Text Align",
+            "enum": ["", "left", "right", "center"],
             "default": ""
           }
         }
@@ -120,7 +128,7 @@ export class EditorSchema {
             "colStyle": { "$ref": "#/definitions/CSSStyle" },
             "width": {
               "$id": "#/properties/columns/items/properties/width",
-              "type": "integer",
+              "type": "string",
               "title": "Width",
               "default": ""
             },
@@ -133,7 +141,8 @@ export class EditorSchema {
                 "RowHeader",
                 "Calculation",
                 "Data"
-              ]
+              ],
+              "default": "Calculation"
             },
             "refName": {
               "$id": "#/properties/columns/items/properties/refName",
@@ -239,12 +248,12 @@ export class EditorSchema {
         }
       },
       "tableProp": {
-        "$id": "#/properties/headerRow",
+        "$id": "#/properties/tableProp",
         "type": "object",
         "title": "Table",
         "propertyOrder": 1,
         "format": "categories",
-        "required": ["Header", "Table", "Borders"],
+        "required": ["Header", "Table", "Style"],
         "options": {
           "disable_collapse": true,
           "disable_edit_json": true
@@ -252,8 +261,15 @@ export class EditorSchema {
         "properties": {
           "Table": { "$ref": "#/definitions/CSSStyle" },
           "Header": { "$ref": "#/definitions/CSSStyle" },
-          "Borders": { "$ref": "#/definitions/borderStyle" }
-
+          "Style": {
+            "$id": "#/properties/tableProp/properties/Style",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": ["table-striped", "table-bordered","table-borderless", "table-sm","table-md"]
+            }
+          }
         }
       }
     }

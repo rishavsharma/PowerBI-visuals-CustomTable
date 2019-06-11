@@ -121,7 +121,7 @@ export class EditModeVisual {
             var tableStyle = FormatUtils.getStyle(tableDefinition.tableProp.Table, tableDefinition);
             customTableStyle = ";" + tableStyle + ";";
         }
-        var w = Utils.getTableTotalWidth(tableDefinition);
+        //var w = Utils.getTableTotalWidth(tableDefinition);
         //var tableHtml = "<div class='tablewrapper'><div class='div-table' style='width:"+w+"px"+customTableStyle+"''>"; // TODO: Det verkar som att bredden inte behövs - det ställer bara till det när det gäller additionalwidth... Nackdelen är att vi inte får en scrollbar om vi förminskar fönstret...
         var tableHtml = "<div class='tablewrapper'><table class='table table-condensed table-borderless' style='" + customTableStyle + "''>";
 
@@ -131,14 +131,17 @@ export class EditModeVisual {
 
         // Master header
         if (typeof tableDefinition.masterHeader !== 'undefined') {
-            tableHtml += "<div class='div-table-row-masterheader'  style='" + tableDefinition.masterHeader.headerStyle + "'><div>" + tableDefinition.masterHeader.title + "</div></div>";
+            tableHtml += "<tr class='div-table-row-masterheader'  style='" + tableDefinition.masterHeader.headerStyle + "'><td>" + tableDefinition.masterHeader.title + "</td></tr>";
         }
 
         tableHtml += "<tr class='div-table-row-header' style='" + rowStyle + "'>";
         for (var c = 0; c < tableDefinition.columns.length; c++) {
             var headerStyle = FormatUtils.getStyle(tableDefinition.columns[c].headerStyle, tableDefinition);
             var headerTitle = Utils.getTitle(tableDefinition.columns[c], tableDefinition, model);
-            tableHtml += "<th class='div-table-col-number' style='width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
+            if (tableDefinition.columns[c].width !== "") {
+                headerStyle += "width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;"
+            }
+            tableHtml += "<th class='div-table-col-number' style='" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
         }
         tableHtml += "</tr>";
         var DisplayAllRows = false; // Default value = display all rows
@@ -174,9 +177,12 @@ export class EditModeVisual {
             var rowCols = [];
             for (var c = 0; c < tableDefinition.columns.length; c++) {
                 var col = tableDefinition.columns[c];
-                var colRowStyle = FormatUtils.getStyle(col.colStyle, tableDefinition);
+                var rowStyle = FormatUtils.getStyle(col.colStyle, tableDefinition);
                 var renderValue = "";
-                var rowStyle = "width:" + col.width + "px;" + colRowStyle;
+                if(col.width !== ""){
+                    rowStyle += "width:" + col.width + "px;";
+                }
+
                 var cellRowDataStyle = FormatUtils.getStyle(row.cellRowDataStyle, tableDefinition);
                 if (col.type === "Data") {
                     // Datakolumners innehåll hämtar vi från modellen direkt.
