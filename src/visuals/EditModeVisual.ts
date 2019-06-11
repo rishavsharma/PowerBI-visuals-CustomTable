@@ -6,6 +6,7 @@ import { CalculationEngine } from "./CalculationEngine";
 import * as JSONEditor from "@json-editor/json-editor"
 import { EditorSchema } from "./EditorSchema"
 //import * as $ from 'jquery'
+import * as _ from 'lodash'
 export class EditModeVisual {
     private internalVersionNo: string = "2.0.0";
     private visual: Visual;
@@ -29,6 +30,7 @@ export class EditModeVisual {
         btnSave.title = "Save Config";
         btnSave.className = "btn btn-secondary json-editor-btn-edit json-editor-btntype-editjson";
         btnSave.innerText = "Save";
+
         //target.appendChild(btnLoadFromFieldList);
         var divContainer: HTMLDivElement = document.createElement("div");
         divContainer.style.height = "94%"; // With 100% we get scrollbars in edit mode.
@@ -37,7 +39,7 @@ export class EditModeVisual {
 
         var newEditor: HTMLDivElement = document.createElement("div");
         newEditor.className = "newEditor"
-        //target.appendChild(newEditor);        
+        //target.appendChild(newEditor);     
         var that = this.visual;
         var thisRef = this;
         newEditor.appendChild(btnSave);
@@ -59,15 +61,13 @@ export class EditModeVisual {
                     no_additional_properties: true,
                     schema: EditorSchema.schema,
                     prompt_before_delete: false,
-                    startval: tableConfig,
-                    // iconlib: "bootstrap4"
+                    startval: tableConfig
                 });
 
                 this.jsoneditor.on('change', function () {
                     var tableConfig = thisRef.jsoneditor.getValue();
                     settings.dataPoint.tableConfiguration = JSON.stringify(tableConfig)
                     thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
-                    console.log(tableConfig);
                     //var validation_errors = jsoneditor.validate();
                     // Show validation errors if there are any           
                 });
