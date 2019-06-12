@@ -123,7 +123,12 @@ export class EditModeVisual {
         }
         //var w = Utils.getTableTotalWidth(tableDefinition);
         //var tableHtml = "<div class='tablewrapper'><div class='div-table' style='width:"+w+"px"+customTableStyle+"''>"; // TODO: Det verkar som att bredden inte behövs - det ställer bara till det när det gäller additionalwidth... Nackdelen är att vi inte får en scrollbar om vi förminskar fönstret...
-        var tableHtml = "<div class='tablewrapper'><table class='table table-condensed table-borderless' style='" + customTableStyle + "''>";
+
+        var customClasses = ""
+        if (tableDefinition.tableProp.Style) {
+            customClasses = FormatUtils.parseClasses(tableDefinition.tableProp.Style);
+        }
+        var tableHtml = "<div class='tablewrapper table-responsive-sm'><table class='table " + customClasses + "' style='" + customTableStyle + "''>";
 
 
         // Table header row
@@ -179,7 +184,7 @@ export class EditModeVisual {
                 var col = tableDefinition.columns[c];
                 var rowStyle = FormatUtils.getStyle(col.colStyle, tableDefinition);
                 var renderValue = "";
-                if(col.width !== ""){
+                if (col.width !== "") {
                     rowStyle += "width:" + col.width + "px;";
                 }
 
@@ -239,7 +244,7 @@ export class EditModeVisual {
                 if (row.formula.length === 0) {
                     renderValue = "";
                 }
-                var colHtml = "<td class='div-table-col-number' style='" + rowStyle + "'><div class='table-cell-content' style='" + cellRowDataStyle + "'><pre>" + renderValue + "</pre></div></td>";
+                var colHtml = "<td class='div-table-col-number' style='" + rowStyle + ";" + cellRowDataStyle + "'><div class='table-cell-content' style='" + "" + "'><pre>" + renderValue + "</pre></div></td>";
                 rowHtml += colHtml;
             }
             rowHtml += "</tr>";

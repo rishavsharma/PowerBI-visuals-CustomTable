@@ -10,7 +10,8 @@ export class EditorSchema {
           "font-size",
           "color",
           "font-weight",
-          "text-align"],
+          "text-align",
+          "font-family"],
         "options": {
           "disable_collapse": true,
           "disable_edit_json": true
@@ -49,10 +50,40 @@ export class EditorSchema {
             "default": ""
           },
           "text-align": {
-            "$id": "#/definitions/CSSStyle/properties/font-weight",
+            "$id": "#/definitions/CSSStyle/properties/font-align",
             "type": "string",
             "title": "Text Align",
             "enum": ["", "left", "right", "center"],
+            "default": ""
+          },
+          "font-family": {
+            "$id": "#/definitions/CSSStyle/properties/font-family",
+            "type": "string",
+            "title": "Font Family",
+            "enum": ["", "Arial",
+              "Arial Black",
+              "Arial Unicode MS",
+              "Calibri",
+              "Cambria",
+              "Cambria Math",
+              "Candara",
+              "Comic Sans MS",
+              "Consolas",
+              "Constantia",
+              "Corbel",
+              "Courier New",
+              "wf_standard-font, helvetica, arial, sans-serif",
+              "Georgia",
+              "Lucida Sans Unicode",
+              "Segoe UI Bold, wf_segoe-ui_bold, helvetica, arial, sans-serif",
+              "Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif",
+              "Segoe UI Light, wf_segoe-ui_light, helvetica, arial, sans-serif",
+              "Symbol",
+              "Tahoma",
+              "Times New Roman",
+              "Trebuchet MS",
+              "Verdana",
+              "Wingdings"],
             "default": ""
           }
         }
@@ -263,11 +294,41 @@ export class EditorSchema {
           "Header": { "$ref": "#/definitions/CSSStyle" },
           "Style": {
             "$id": "#/properties/tableProp/properties/Style",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "enum": ["table-striped", "table-bordered","table-borderless", "table-sm","table-md"]
+            "type": "object",
+            "format": "grid",
+            "required": ["size", "border", "stripes"],
+            "options": {
+              "disable_collapse": true,
+              "disable_edit_json": true
+            },
+            "properties": {
+              "size": {
+                "$id": "#/properties/tableProp/properties/Style/properties/size",
+                "type": "string",
+                "title": "Size",
+                "uniqueItems": true,
+                "propertyOrder": 1,
+                "enum": ["table-sm", "table-md", "table-condensed"],
+                "default": "table-sm"
+              },
+              "border": {
+                "$id": "#/properties/tableProp/properties/Style/properties/border",
+                "type": "string",
+                "title": "Border",
+                "uniqueItems": true,
+                "propertyOrder": 1,
+                "enum": ["table-bordered", "table-borderless", ""],
+                "default": "table-borderless"
+              },
+              "stripes": {
+                "$id": "#/properties/tableProp/properties/Style/properties/stripes",
+                "type": "string",
+                "title": "Stripes",
+                "uniqueItems": true,
+                "propertyOrder": 1,
+                "enum": ["table-hover", "table-striped", ""],
+                "default": ""
+              }
             }
           }
         }

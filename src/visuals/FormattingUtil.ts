@@ -36,3 +36,17 @@ export function parseStyle(styleObject: any): string {
 
     return returnCSS;
 }
+
+export function parseClasses(styleObject: any): string {
+    var classzz = "";
+    for (var key in styleObject) {
+        if (styleObject.hasOwnProperty(key)) {
+            if (Utils.containsValue(styleObject[key])) {
+                classzz += " " + styleObject[key];
+            }
+            //returnCSS = returnCSS + ";" + key + ":" + styleVal
+        }
+    }
+
+    return classzz;
+}
