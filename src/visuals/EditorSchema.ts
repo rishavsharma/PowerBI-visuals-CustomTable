@@ -233,6 +233,7 @@ export class EditorSchema {
           "required": [
             "title",
             "formula",
+            "indent",
             "rowStyle",
             "visible",
             "cellRowHeaderStyle",
@@ -261,7 +262,6 @@ export class EditorSchema {
               "pattern": "^(.*)$",
               "propertyOrder": 2
             },
-            "rowStyle": { "$ref": "#/definitions/CSSStyle" },
             "visible": {
               "$id": "#/properties/rows/items/properties/visible",
               "type": "boolean",
@@ -273,6 +273,14 @@ export class EditorSchema {
                 true
               ]
             },
+            "indent": {
+              "$id": "#/properties/rows/items/properties/indent",
+              "type": "integer",
+              "title": "Indent",
+              "default":0,
+              "propertyOrder": 3
+            },
+            "rowStyle": { "$ref": "#/definitions/CSSStyle" },            
             "cellRowHeaderStyle": { "$ref": "#/definitions/CSSStyle" },
             "cellRowDataStyle": { "$ref": "#/definitions/CSSStyle" }
           }

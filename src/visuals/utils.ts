@@ -2,6 +2,8 @@ import powerbi from "powerbi-visuals-api";
 import DataViewCategorical = powerbi.DataViewCategorical
 import DataViewTable = powerbi.DataViewTable
 import DataViewMetadata = powerbi.DataViewMetadata
+
+
 export function getMeasureIndex(dv: DataViewCategorical, measureName: string): number {
     let RetValue: number = -1;
     for (let i = 0; i < dv.values.length; i++) {
@@ -23,7 +25,10 @@ export function getFormat(dv: DataViewTable, columnName: string): string {
     return RetValue;
 }
 
-
+export function indentSpace(str) {
+    if(str == null) return str;
+    return str.replace(/^\s+/g, '&nbsp;');
+  }
 export function getMetadataColumnIndex(dv: DataViewMetadata, measureOrCategoryName: string): number {
     var retValue = -1;
     for (var i = 0, ilen = dv.columns.length; i < ilen; i++) {
@@ -96,32 +101,6 @@ export function getTableTotalWidth(tableDefinition: any): number {
         w += additionalWidth;
     }
     return w;
-}
-
-export function exportToExcel(htmls) {
-    var uri = 'data:application/vnd.ms-excel;base64,';
-    var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
-    var base64 = function (s) {
-        return window.btoa(unescape(encodeURIComponent(s)))
-    };
-
-    var format = function (s, c) {
-        return s.replace(/{(\w+)}/g, function (m, p) {
-            return c[p];
-        })
-    };
-
-
-    var ctx = {
-        worksheet: 'Worksheet',
-        table: htmls
-    }
-
-
-    var link = document.createElement("a");
-    link.download = "export.xlsx";
-    link.href = uri + base64(format(template, ctx));
-    link.click();
 }
 
 export function getTitle(col: any, tableDefinition: any, model: any) {

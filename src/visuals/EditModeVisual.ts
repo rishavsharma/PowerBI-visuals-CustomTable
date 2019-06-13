@@ -5,8 +5,10 @@ import * as FormatUtils from "./FormattingUtil"
 import { CalculationEngine } from "./CalculationEngine";
 import * as JSONEditor from "@json-editor/json-editor"
 import { EditorSchema } from "./EditorSchema"
-//import * as $ from 'jquery'
-import * as _ from 'lodash'
+import ExcellentExport from 'excellentexport';
+import * as $ from 'jquery'
+//import * as _ from 'lodash'
+import { indentSpace } from './utils';
 export class EditModeVisual {
     private internalVersionNo: string = "2.0.0";
     private visual: Visual;
@@ -128,7 +130,24 @@ export class EditModeVisual {
         if (tableDefinition.tableProp.Style) {
             customClasses = FormatUtils.parseClasses(tableDefinition.tableProp.Style);
         }
-        var tableHtml = "<div class='tablewrapper'><table class='table " + customClasses + "' style='" + customTableStyle + "''>";
+        if (true) {
+
+            var a = document.getElementById("anchorDataElement");
+            if (!a) {
+                a = document.createElement("a");
+                a.setAttribute("id", "anchorDataElement");
+                a.setAttribute("href", "#");
+                a.setAttribute("download", "somedata.xls");
+                //a.setAttribute("style", "width: 100%;text-align: right;display: inline-block;");
+                a.innerText = "Export";
+                a.onclick = function (e) {
+                    return ExcellentExport.excel(this, "dataTable", "Data");
+                }
+                targetElement.insertAdjacentElement('beforebegin', a);
+            }
+
+        }
+        var tableHtml = "<div class='tablewrapper'><table id='dataTable' class='table " + customClasses + "' style='" + customTableStyle + "''>";
 
 
         // Table header row
@@ -146,7 +165,7 @@ export class EditModeVisual {
             if (tableDefinition.columns[c].width !== "") {
                 headerStyle += "width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;"
             }
-            tableHtml += "<th class='div-table-col-number' style='" + rowStyle + ";" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
+            tableHtml += "<th class='div-table-col-number' style='" + rowStyle + ";" + headerStyle + "'>" + headerTitle + "</th>";
         }
         tableHtml += "</tr>";
         var DisplayAllRows = false; // Default value = display all rows
@@ -175,6 +194,7 @@ export class EditModeVisual {
         // Table rows
         for (var r = 0; r < tableDefinition.rows.length; r++) {
             var row = tableDefinition.rows[r];
+            var rowIndent='&nbsp;'.repeat(row.indent)
             var rowHtml = "";
             var rowStyle = FormatUtils.getStyle(row.rowStyle, tableDefinition);
             rowHtml += "<tr class='div-table-row' style='" + rowStyle + "'>";
@@ -204,7 +224,7 @@ export class EditModeVisual {
                     rowCols.push(v);
                 }
                 else if (col.type === "RowHeader") {
-                    renderValue = row.title;
+                    renderValue = rowIndent+row.title;
                     var cellRowHeaderStyle = FormatUtils.getStyle(row.cellRowHeaderStyle, tableDefinition);
                     // TODO: behövs bredden verkligen här. Just nu tar vi bort den.
                     //cellRowDataStyle = "width:" + col.width + "px;" +  cellRowHeaderStyle;
@@ -244,7 +264,7 @@ export class EditModeVisual {
                 if (row.formula.length === 0) {
                     renderValue = "";
                 }
-                var colHtml = "<td class='div-table-col-number' style='" + rowStyle + ";" + cellRowDataStyle + "'><div class='table-cell-content' style='" + "" + "'><pre>" + renderValue + "</pre></div></td>";
+                var colHtml = "<td class='div-table-col-number' style='" + rowStyle + ";" + cellRowDataStyle + "'>" + renderValue + "</td>";
                 rowHtml += colHtml;
             }
             rowHtml += "</tr>";
