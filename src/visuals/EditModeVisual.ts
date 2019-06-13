@@ -128,7 +128,7 @@ export class EditModeVisual {
         if (tableDefinition.tableProp.Style) {
             customClasses = FormatUtils.parseClasses(tableDefinition.tableProp.Style);
         }
-        var tableHtml = "<div class='tablewrapper table-responsive-sm'><table class='table " + customClasses + "' style='" + customTableStyle + "''>";
+        var tableHtml = "<div class='tablewrapper'><table class='table " + customClasses + "' style='" + customTableStyle + "''>";
 
 
         // Table header row
@@ -146,7 +146,7 @@ export class EditModeVisual {
             if (tableDefinition.columns[c].width !== "") {
                 headerStyle += "width:" + tableDefinition.columns[c].width + "px;min-width:" + tableDefinition.columns[c].width + "px;"
             }
-            tableHtml += "<th class='div-table-col-number' style='" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
+            tableHtml += "<th class='div-table-col-number' style='" + rowStyle + ";" + headerStyle + "'><div class='table-cell-content'>" + headerTitle + "</div></th>";
         }
         tableHtml += "</tr>";
         var DisplayAllRows = false; // Default value = display all rows

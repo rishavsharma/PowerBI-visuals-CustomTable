@@ -76,11 +76,11 @@ p {
   max-height: 300px;
 }
 
-div.newEditor * {
+.tablewrapper *, div.newEditor * {
   font-size:12px!important;
   font-family: sans-serif;
   font-weight: 100;
-  
+  -webkit-font-smoothing: antialiased;  
 }
 
 .div-table-row-header > th {
@@ -95,3 +95,5 @@ div.table-cell-content > pre {
   border-spacing: 0px;
   margin: 0px;
 }
+
+div.tablewrapper table.table tr th { position: sticky; top: 0; background-color: white }
