@@ -82,7 +82,7 @@ export class Visual implements IVisual {
         var w = options.viewport.width;
         var h = options.viewport.height;
         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-
+        console.log(options);
         this.model = visualTransform(options);
         this.tableDefinition = null;
         var errorMsg = "";
@@ -96,10 +96,14 @@ export class Visual implements IVisual {
         }
 
         if (options.editMode === 1) {
+            console.log("Rendering Edit mode..")
+            console.log(this.settings);
             this.editModeVisual.ClearAllContent(this.target);
             this.editModeVisual.RenderEditMode(this.target, this.settings);
+
         } else {
             if (errorMsg.length === 0) {
+                console.log("Rendering View mode..")
                 this.editModeVisual.ClearAllContent(this.target);
                 this.editModeVisual.RenderAllContent(this.target, this.tableDefinition);
             } else {
@@ -143,5 +147,24 @@ export class Visual implements IVisual {
     private static parseSettings(dataView: DataView): VisualSettings {
         return VisualSettings.parse(dataView) as VisualSettings;
     }
+    public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
+        let objectName = options.objectName;
+        let objectEnumeration: VisualObjectInstance[] = [];
+
+        switch (options.objectName) {
+            case 'config':
+                objectEnumeration.push({
+                    objectName: objectName,
+                    displayName: "Config",
+                    properties: {
+                        exportExcel: this.settings.config.exportExcel
+                    },
+                    selector: null
+                })
+                break;
+        }
+        return objectEnumeration;
+    }
+
 }
 

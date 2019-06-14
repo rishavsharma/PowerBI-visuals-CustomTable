@@ -130,7 +130,7 @@ export class EditModeVisual {
         if (tableDefinition.tableProp.Style) {
             customClasses = FormatUtils.parseClasses(tableDefinition.tableProp.Style);
         }
-        if (true) {
+        if (false) {
 
             var a = document.getElementById("anchorDataElement");
             if (!a) {
@@ -194,7 +194,7 @@ export class EditModeVisual {
         // Table rows
         for (var r = 0; r < tableDefinition.rows.length; r++) {
             var row = tableDefinition.rows[r];
-            var rowIndent='&nbsp;'.repeat(row.indent)
+            var rowIndent = '&nbsp;'.repeat(row.indent)
             var rowHtml = "";
             var rowStyle = FormatUtils.getStyle(row.rowStyle, tableDefinition);
             rowHtml += "<tr class='div-table-row' style='" + rowStyle + "'>";
@@ -224,7 +224,7 @@ export class EditModeVisual {
                     rowCols.push(v);
                 }
                 else if (col.type === "RowHeader") {
-                    renderValue = rowIndent+row.title;
+                    renderValue = rowIndent + row.title;
                     var cellRowHeaderStyle = FormatUtils.getStyle(row.cellRowHeaderStyle, tableDefinition);
                     // TODO: behövs bredden verkligen här. Just nu tar vi bort den.
                     //cellRowDataStyle = "width:" + col.width + "px;" +  cellRowHeaderStyle;

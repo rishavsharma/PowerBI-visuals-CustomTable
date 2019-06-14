@@ -18,6 +18,17 @@
                     }
                 }
             }
+        },
+        "config": {
+            "displayName": "Config",
+            "properties": {
+                "exportExcel": {
+                    "displayName": "Enable Excel Export",
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
         }
     },
     "dataViewMappings": [
