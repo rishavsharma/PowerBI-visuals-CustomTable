@@ -148,7 +148,8 @@ export function templateFromFields(model: any): string {
     "refName": "%REFNAME%", 
     "title": "%TITLECOLNAME%",
     "calculationFormula": "", 
-    "format": ""
+    "format": "",
+    "visible": true
 },`;
         if (c === 0) {
             j1 = j1.replace(/%TITLECOLNAME%/g, col.displayName);
@@ -171,7 +172,9 @@ export function templateFromFields(model: any): string {
 {
     "title": "%ROWTITLE%",
     "formula": "%FORMULA%",
-    "visible": true
+    "refName": "[%ROWTITLE%]", 
+    "visible": true,
+    "type": "Data"
 },`;
         j1 = j1.replace(/%ROWTITLE%/g, row.title);
         j1 = j1.replace(/%FORMULA%/g, row.name);

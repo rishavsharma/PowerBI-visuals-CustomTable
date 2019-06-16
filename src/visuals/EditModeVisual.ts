@@ -9,6 +9,7 @@ import ExcellentExport from 'excellentexport';
 import * as $ from 'jquery'
 //import * as _ from 'lodash'
 import { indentSpace } from './utils';
+import { TableConfig, ColumnType } from './TableConfig';
 export class EditModeVisual {
     private internalVersionNo: string = "2.0.0";
     private visual: Visual;
@@ -94,7 +95,7 @@ export class EditModeVisual {
         thisRef.RenderAllContent(divRenderInEditMode, tableConfig);
     }
 
-    public RenderAllContent(targetElement: HTMLElement, tableDefinition: any) {
+    public RenderAllContent(targetElement: HTMLElement, tableDefinition: TableConfig) {
 
         if (tableDefinition === null) {
             this.RenderNoContentText(targetElement);
@@ -130,7 +131,7 @@ export class EditModeVisual {
         if (tableDefinition.tableProp.Style) {
             customClasses = FormatUtils.parseClasses(tableDefinition.tableProp.Style);
         }
-        if (false) {
+        if (this.visual.getSettings().config.exportExcel) {
 
             var a = document.getElementById("anchorDataElement");
             if (!a) {
@@ -146,17 +147,17 @@ export class EditModeVisual {
                 targetElement.insertAdjacentElement('beforebegin', a);
             }
 
+        }else{
+            var a = document.getElementById("anchorDataElement");
+            if(a){
+                a.remove();
+            }
         }
         var tableHtml = "<div class='tablewrapper'><table id='dataTable' class='table " + customClasses + "' style='" + customTableStyle + "''>";
 
 
         // Table header row
         var rowStyle = FormatUtils.getStyle(tableDefinition.tableProp.Header, tableDefinition);
-
-        // Master header
-        if (typeof tableDefinition.masterHeader !== 'undefined') {
-            tableHtml += "<tr class='div-table-row-masterheader'  style='" + tableDefinition.masterHeader.headerStyle + "'><td>" + tableDefinition.masterHeader.title + "</td></tr>";
-        }
 
         tableHtml += "<tr class='div-table-row-header' style='" + rowStyle + "'>";
         for (var c = 0; c < tableDefinition.columns.length; c++) {
@@ -169,27 +170,8 @@ export class EditModeVisual {
         }
         tableHtml += "</tr>";
         var DisplayAllRows = false; // Default value = display all rows
-        if (typeof (tableDefinition.displayAllRows) !== "undefined") {
-            DisplayAllRows = tableDefinition.displayAllRows;
-        }
-
-        // Fix ranges (replace : with multiple +)
-        for (var r = 0; r < tableDefinition.rows.length; r++) {
-            var row = tableDefinition.rows[r];
-            var newFormula = "";
-            if (row.formula.indexOf("::") > -1) { // indexOf instead of includes to support older browsers
-                var p = row.formula.indexOf("::");
-                var startRange = row.formula.substring(0, p).trim();
-                var endRange = row.formula.substring(p + 2).trim();
-                for (var i = 0; i < model.length; i++) {
-                    if (model[i].name >= startRange && model[i].name <= endRange) {
-                        newFormula += "+" + model[i].name;
-                    }
-                }
-                row.formula = newFormula;
-            }
-        }
-
+        
+        
         var calEngine = new CalculationEngine(model, tableDefinition);
         // Table rows
         for (var r = 0; r < tableDefinition.rows.length; r++) {
@@ -209,7 +191,7 @@ export class EditModeVisual {
                 }
 
                 var cellRowDataStyle = FormatUtils.getStyle(row.cellRowDataStyle, tableDefinition);
-                if (col.type === "Data") {
+                if (col.type === ColumnType.Data) {
                     // Datakolumners innehåll hämtar vi från modellen direkt.
                     var v = calEngine.GetValueForColumnRowCalculationByName(row, col);
                     allColumnsAreBlank = v.rawValue !== null ? false : allColumnsAreBlank;
@@ -223,7 +205,7 @@ export class EditModeVisual {
                     v.formatString = col.format;
                     rowCols.push(v);
                 }
-                else if (col.type === "RowHeader") {
+                else if (col.type === ColumnType.RowHeader) {
                     renderValue = rowIndent + row.title;
                     var cellRowHeaderStyle = FormatUtils.getStyle(row.cellRowHeaderStyle, tableDefinition);
                     // TODO: behövs bredden verkligen här. Just nu tar vi bort den.
@@ -231,7 +213,7 @@ export class EditModeVisual {
                     cellRowDataStyle = cellRowHeaderStyle;
                     rowCols.push({ rawValue: null, formatString: null });
                 }
-                else if (col.type === "Calculation") {
+                else if (col.type === ColumnType.Calculation) {
                     // Kolumner som baseras på en formeln räknas ut
                     var calcValue = calEngine.GetValueForColumCalculation(row, col);
                     renderValue = calcValue.formattedValue;
@@ -247,20 +229,7 @@ export class EditModeVisual {
                     renderValue = "";
                     rowCols.push({ rawValue: null, formatString: null });
                 }
-                // Check if we should ignore presentation of this field for this column.
-                var shouldHideValue = false;
-                if (typeof row.hideForColumns !== 'undefined') {
-                    for (var i = 0; i < row.hideForColumns.length; i++) {
-                        if (row.hideForColumns[i] === col.refName) {
-                            shouldHideValue = true;
-                            break;
-                        }
-                    }
-                }
-                if (shouldHideValue) {
-                    renderValue = "&nbsp;";
-                }
-
+                
                 if (row.formula.length === 0) {
                     renderValue = "";
                 }

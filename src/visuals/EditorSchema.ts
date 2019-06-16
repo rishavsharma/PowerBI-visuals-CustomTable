@@ -21,7 +21,6 @@ export class EditorSchema {
             "$id": "#/definitions/CSSStyle/properties/background-color",
             "type": "string",
             "title": "background-color",
-            //"format": "color",
             "default": ""
           },
           "font-size": {
@@ -39,7 +38,6 @@ export class EditorSchema {
             "$id": "#/definitions/CSSStyle/properties/color",
             "type": "string",
             "title": "Font Color",
-            //"format": "color",
             "default": ""
           },
           "font-weight": {
@@ -152,7 +150,8 @@ export class EditorSchema {
             "refName",
             "title",
             "calculationFormula",
-            "format"
+            "format",
+            "visible"
           ],
           "properties": {
             "headerStyle": { "$ref": "#/definitions/CSSStyle" },
@@ -206,6 +205,14 @@ export class EditorSchema {
               "pattern": "^(.*)$",
               "propertyOrder": 4
 
+            },
+            "visible": {
+              "$id": "#/properties/columns/items/properties/visible",
+              "type": "boolean",
+              "title": "Visible",
+              "default": true,
+              "format": "checkbox",
+              "propertyOrder": 0
             }
           }
         }
@@ -236,6 +243,8 @@ export class EditorSchema {
             "indent",
             "rowStyle",
             "visible",
+            "type",
+            "refName",
             "cellRowHeaderStyle",
             "cellRowDataStyle"
           ],
@@ -279,6 +288,23 @@ export class EditorSchema {
               "title": "Indent",
               "default":0,
               "propertyOrder": 3
+            },
+            "type": {
+              "$id": "#/properties/rows/items/properties/type",
+              "type": "string",
+              "title": "Type",
+              "pattern": "^(.*)$",
+              "enum": [
+                "Calculation",
+                "Data"
+              ],
+              "default": "Calculation"
+            },
+            "refName": {
+              "$id": "#/properties/rows/items/properties/refName",
+              "type": "string",
+              "title": "Refname",
+              "propertyOrder": 2
             },
             "rowStyle": { "$ref": "#/definitions/CSSStyle" },            
             "cellRowHeaderStyle": { "$ref": "#/definitions/CSSStyle" },
