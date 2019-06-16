@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/jquery": "^3.3.29",
     "@types/lodash": "^4.14.134",
+    "lodash": "^4.14.134",
     "jquery": "^3.4.1",
     "powerbi-visuals-api": "^2.6.0",
     "powerbi-visuals-utils-dataviewutils": "^2.2.0",

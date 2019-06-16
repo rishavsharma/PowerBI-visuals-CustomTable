@@ -68,6 +68,9 @@ export function EvalFormula(expr) {
     return e;
 }
 
+export function evalInContext(js, context) {
+    return function() { return eval(js); }.call(context);
+}
 export function replace2(str, strToFind, strToReplace) {
     var strR = strToReplace;
     var strF = strToFind.replace("[", "\\[", "g").replace("]", "\\]", "g").replace(")", "\\)", "g").replace("(", "\\(", "g");

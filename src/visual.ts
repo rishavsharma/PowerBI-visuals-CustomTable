@@ -19,10 +19,11 @@ import VisualObjectInstancesToPersist = powerbi.VisualObjectInstancesToPersist;
 // import { valueFormatter } from "powerbi-visuals-utils-formattingutils/lib/src/valueFormatter";
 // import * as FormatUtils from "./FormattingUtil"
 import { CalculationEngine } from './visuals/CalculationEngine';
-//import * as Utils from "./utils"
+import * as Utils from "./visuals/utils"
 import { EditModeVisual } from "./visuals/EditModeVisual"
-import { TableConfig, RowType } from './visuals/TableConfig';
-
+import { TableConfig, RowType, ColumnType } from './visuals/TableConfig';
+import * as _ from 'lodash'
+import { EvalFormula } from './visuals/utils';
 //function visualTransform(options: VisualUpdateOptions, host: IVisualHost, thisRef: Visual): VisualViewModel {            
 function visualTransform(options: VisualUpdateOptions): any {
     let dataViews = options.dataViews;
@@ -89,21 +90,38 @@ function visualTransform2(options: VisualUpdateOptions, tableDefinition: TableCo
         tblData[rowLabel] = row;
     }
     try {
+        
         for (let index = 0; index < tableDefinition.rows.length; index++) {
             const row = tableDefinition.rows[index];
             var rowRef = tblData[row.title];
             if (rowRef) {
-                rowRef["config"] = row
-                if (row.type === RowType.Data) {
-
-                } else if (row.type === RowType.Calculation) {
-                   
-                }
-            }else{
-                var newRow = {
-                    config:row
+                rowRef["config"] = row;
+            } else {
+                
+                rowRef = {
+                    config: row,
+                    title: row.title,
+                    name: "[" + row.title + "]",
+                    values : {}
                 };
-                tblData[row.title] = newRow
+                tblData[row.title] = rowRef;                
+            }
+                Utils.evalInContext('console.log(this["Doroga"])',tblData);                    
+            for (let index = 0; index < tableDefinition.columns.length; index++) {
+                const col = tableDefinition.columns[index];
+                if(row.type === RowType.Calculation && col.type !== ColumnType.RowHeader){
+                    var formulaCal = row.formula
+                    _.forEach(row.formula.match(/\[[^[]*\]/g),function(f){
+                        var keyR = f.substring(1,f.length-1);
+                        formulaCal=formulaCal.replace(f,tblData[keyR].values[col.title].rawValue)
+                    });
+                    console.log(col.title+"-"+formulaCal)
+                    formulaCal=Utils.EvalFormula(formulaCal);
+                    rowRef.values[col.title] = {
+                        "config" : col,
+                        "rawValue" : formulaCal
+                    };
+                }
             }
 
         }
