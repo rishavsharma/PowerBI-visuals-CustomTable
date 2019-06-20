@@ -68,9 +68,6 @@ export function EvalFormula(expr) {
     return e;
 }
 
-export function evalInContext(js, context) {
-    return function() { return eval(js); }.call(context);
-}
 export function replace2(str, strToFind, strToReplace) {
     var strR = strToReplace;
     var strF = strToFind.replace("[", "\\[", "g").replace("]", "\\]", "g").replace(")", "\\)", "g").replace("(", "\\(", "g");
@@ -151,8 +148,7 @@ export function templateFromFields(model: any): string {
     "refName": "%REFNAME%", 
     "title": "%TITLECOLNAME%",
     "calculationFormula": "", 
-    "format": "",
-    "visible": true
+    "format": ""
 },`;
         if (c === 0) {
             j1 = j1.replace(/%TITLECOLNAME%/g, col.displayName);
@@ -175,9 +171,7 @@ export function templateFromFields(model: any): string {
 {
     "title": "%ROWTITLE%",
     "formula": "%FORMULA%",
-    "refName": "[%ROWTITLE%]", 
-    "visible": true,
-    "type": "Data"
+    "visible": true
 },`;
         j1 = j1.replace(/%ROWTITLE%/g, row.title);
         j1 = j1.replace(/%FORMULA%/g, row.name);
