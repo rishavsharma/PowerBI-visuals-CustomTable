@@ -18,18 +18,18 @@ export class CalculationEngine {
                 if (iPos !== -1) {
                     if (this.model[i].values[colIndex]) {
                         var modelRawValue = this.model[i].values[colIndex].rawValue;
-                        if(typeof modelRawValue !== 'number'){
+                        if (typeof modelRawValue !== 'number') {
                             modelRawValue = "'" + modelRawValue + "'";
                         }
                         fExpression = Utils.replace2(fExpression, this.model[i].name, modelRawValue);
                     } else {
-                        fExpression = "<<Column ERROR>>"
+                        fExpression = ""
                     }
                 }
             }
         }
         var rawValue = Utils.EvalFormula(fExpression);
-        
+
         var format = this.model[0].values[colIndex].formatString;
         if (Utils.containsValue(colDef.format)) { // Only use column formatting if it is defined
             format = colDef.format;
